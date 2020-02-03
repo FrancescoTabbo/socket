@@ -1,0 +1,94 @@
+html
+  head
+    link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T', crossorigin='anonymous')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+    //link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css")
+    title Chat
+    |   
+    meta(charset='utf-8')
+    |   
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    |   
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css')
+    |   
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+    |   
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js')
+    |   
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js')
+    |
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js")
+    style
+      #messages{height:300px}
+  body
+    .topnav
+      a.active(href='/') Home
+      |   
+      a(href='/guide') Guide
+      |
+      if per == 1   
+        a(href='/Rregister') Register
+      |
+      form(action='/cerca', method='GET')   
+        input(type='text', placeholder='Search..', name='ricerca')
+    br
+    .container
+      .row
+        .col-md-6.offset-md-3.col-sm-12
+          hr
+          h1
+            Chat
+            input(value='clear',id='clear', class='btn btn-danger')
+          br
+          div(id='status')
+          .chat
+            input(type='text', class='form-control', placeholder='username', id='username')
+            |       
+            br
+            |
+            .card
+              .messages.card-block
+                textarea(class='form-control', placeholder='Enter message', id='textarea')
+                |
+                br
+                |       
+                input(type='submit', value='Registra', class='btn btn-danger')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js')
+    script
+      (function(){
+        var element = function(id){
+          return document.getElementById(id);
+        }
+
+        var status = element('status');
+        var messages = element('messages');
+        var textarea = element('textarea');
+        var username = element('username');
+        var clear = element('clear');
+
+        //status
+        var statusDefault = status.textContent;
+
+        var setStatus = function(s){
+          status.textContent = s;
+
+          if(s !== statusDefault){
+            var delay = setTimeout(function(){
+              setStatus(statusDefault);
+            }, 4000);
+          }
+        }
+
+        //connect to socket
+        var socket =io.connect('https://session.franzly.repl.co:4000');
+
+        if(socket!== udefinded){
+          console.log('connected to socket');
+
+          socket.on('output', function(data){
+            console.log(data);
+          });
+        }
+
+
+      })();
